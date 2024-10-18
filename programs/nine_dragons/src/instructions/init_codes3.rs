@@ -28,7 +28,7 @@ pub struct InitCodes3<'info> {
     #[account(
         init,
         payer = owner,
-        seeds = [Project::CODES1_SEED_PREFIX],
+        seeds = [Project::CODES3_SEED_PREFIX],
         bump,
         space = 8 + CodeList::INIT_SPACE
     )]
