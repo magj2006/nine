@@ -54,7 +54,7 @@ pub mod nine_dragons {
     }
 
     pub fn sync_codes1(ctx: Context<SyncCodes1>, param: SyncCodesParam1) -> Result<()> {
-        instructions::sync_codes1(ctx, param)
+        instructions::sync_codes(ctx, param)
     }
 
     pub fn sync_codes2(ctx: Context<SyncCodes2>, param: SyncCodesParam2) -> Result<()> {

@@ -15,7 +15,7 @@ use anchor_spl::{
 use anchor_spl::metadata::{verify_collection, verify_sized_collection_item, VerifySizedCollectionItem, VerifyCollection};
 
 use crate::error::NineDragonsError;
-use crate::states::{CodeList1, CodeList2, CodeList3, CreateNFTParam, Project};
+use crate::states::{CodeList, CodeList2, CodeList3, CreateNFTParam, Project};
 
 pub fn create_nft(
     ctx: Context<CreateNFT>,
@@ -241,17 +241,17 @@ pub struct CreateNFT<'info> {
     #[account(
         mut
     )]
-    codes1: Account<'info, CodeList1>,
+    codes1: Account<'info, CodeList>,
 
     #[account(
         mut
     )]
-    codes2: Account<'info, CodeList2>,
+    codes2: Account<'info, CodeList>,
 
     #[account(
         mut
     )]
-    codes3: Account<'info, CodeList3>,
+    codes3: Account<'info, CodeList>,
 
     /// CHECK: Validate address by deriving pda
     #[account(

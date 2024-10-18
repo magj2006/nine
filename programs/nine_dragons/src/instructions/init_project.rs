@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::states::{CodeList1, CodeList2, CodeList3, Project};
+use crate::states::{CodeList, Project};
 
 pub fn init_project(
     ctx: Context<InitProject>,
@@ -42,7 +42,7 @@ pub struct InitProject<'info> {
         bump,
         space = 8 + Project::INIT_SPACE
     )]
-    project: Account<'info, Project>,
+    project: Box<Account<'info, Project>>,
 
     recipient: SystemAccount<'info>,
 
@@ -53,27 +53,27 @@ pub struct InitProject<'info> {
         payer = owner,
         seeds = [Project::CODES1_SEED_PREFIX],
         bump,
-        space = 8 + CodeList1::INIT_SPACE
+        space = 8 + CodeList::INIT_SPACE
     )]
-    codes1: Account<'info, CodeList1>,
+    codes1: Box<Account<'info, CodeList>>,
 
     #[account(
         init,
         payer = owner,
         seeds = [Project::CODES2_SEED_PREFIX],
         bump,
-        space = 8 + CodeList2::INIT_SPACE
+        space = 8 + CodeList::INIT_SPACE
     )]
-    codes2: Account<'info, CodeList2>,
+    codes2: Box<Account<'info, CodeList>>,
 
     #[account(
         init,
         payer = owner,
         seeds = [Project::CODES3_SEED_PREFIX],
         bump,
-        space = 8 + CodeList3::INIT_SPACE
+        space = 8 + CodeList::INIT_SPACE
     )]
-    codes3: Account<'info, CodeList3>,
+    codes3: Box<Account<'info, CodeList>>,
 
     /// CHECK: PDA account
     #[account(
