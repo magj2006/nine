@@ -17,7 +17,9 @@ pub struct Project {
     pub project_name: String,
     pub is_mutable: bool,
     pub operator: Pubkey,
-    pub codes: Pubkey,
+    pub codes1: Pubkey,
+    pub codes2: Pubkey,
+    pub codes3: Pubkey,
     #[max_len(500)]
     pub _padding: Vec<u8>
 }
@@ -27,7 +29,9 @@ impl Project {
 
     pub const AUTHORITY_SEED_PREFIX: &'static [u8; 9] = b"authority";
 
-    pub const CODES_SEED_PREFIX: &'static [u8; 4] = b"code";
+    pub const CODES1_SEED_PREFIX: &'static [u8; 5] = b"code1";
+    pub const CODES2_SEED_PREFIX: &'static [u8; 5] = b"code2";
+    pub const CODES3_SEED_PREFIX: &'static [u8; 5] = b"code3";
 
     pub const PROJECT_NAME_LEN: u8 = 30;
 

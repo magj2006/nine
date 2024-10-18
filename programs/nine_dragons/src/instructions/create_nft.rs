@@ -29,8 +29,25 @@ pub fn create_nft(
 
     require_gt!(project.nonce, 0, NineDragonsError::CreateCollectionFirst);
 
-    let code_list = &mut ctx.accounts.codes;
-    require!(code_list.codes.iter().any(|code| code.eq(&param.code)), NineDragonsError::InvalidCode);
+    let codes1= &mut ctx.accounts.codes1;
+    let codes2 = &mut ctx.accounts.codes2;
+    let codes3= &mut ctx.accounts.codes3;
+
+    // assert!(codes1.codes.iter().any(|code| code.eq(&param.code)) ||
+    //     codes2.codes.iter().any(|code| code.eq(&param.code)) ||
+        // codes3.codes.iter().any(|code| code.eq(&param.code)));
+
+    if codes1.codes.iter().any(|code| code.eq(&param.code)) {
+        codes1.codes.retain(|x| x.ne(&param.code))
+    } else if codes2.codes.iter().any(|code| code.eq(&param.code)) {
+        codes2.codes.retain(|x| x.ne(&param.code))
+    } else if codes3.codes.iter().any(|code| code.eq(&param.code))
+    {
+        codes3.codes.retain(|x| x.ne(&param.code))
+    } else {
+        return Err(NineDragonsError::InvalidCode.into())
+    }
+
 
     require!(project.collection_nft.is_some(), NineDragonsError::EmptyCollection);
     require_keys_eq!(project.collection_nft.unwrap().key(), ctx.accounts.collection.key(), NineDragonsError::InvalidCollection);
@@ -204,7 +221,9 @@ pub struct CreateNFT<'info> {
         mut,
         seeds = [Project::PROJECT_SEED_PREFIX],
         bump,
-        has_one = codes @ NineDragonsError::InvalidCodesAccount
+        has_one = codes1 @ NineDragonsError::InvalidCodesAccount,
+        has_one = codes2 @ NineDragonsError::InvalidCodesAccount,
+        has_one = codes3 @ NineDragonsError::InvalidCodesAccount,
     )]
     pub project: Box<Account<'info, Project>>,
 
@@ -222,7 +241,17 @@ pub struct CreateNFT<'info> {
     #[account(
         mut
     )]
-    codes: Account<'info, CodeList>,
+    codes1: Account<'info, CodeList>,
+
+    #[account(
+        mut
+    )]
+    codes2: Account<'info, CodeList>,
+
+    #[account(
+        mut
+    )]
+    codes3: Account<'info, CodeList>,
 
     /// CHECK: Validate address by deriving pda
     #[account(

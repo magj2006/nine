@@ -21,7 +21,9 @@ pub fn init_project(
     project.pending_owner = Some(project.owner);
     project.is_mutable = is_mutable;
     project.operator = ctx.accounts.operator.key();
-    project.codes = ctx.accounts.codes.key();
+    project.codes1 = ctx.accounts.codes1.key();
+    project.codes2 = ctx.accounts.codes2.key();
+    project.codes3 = ctx.accounts.codes3.key();
 
     msg!("Initialize project successful");
 
@@ -49,11 +51,29 @@ pub struct InitProject<'info> {
     #[account(
         init,
         payer = owner,
-        seeds = [Project::CODES_SEED_PREFIX],
+        seeds = [Project::CODES1_SEED_PREFIX],
         bump,
         space = 8 + CodeList::INIT_SPACE
     )]
-    codes: Account<'info, CodeList>,
+    codes1: Account<'info, CodeList>,
+
+    #[account(
+        init,
+        payer = owner,
+        seeds = [Project::CODES2_SEED_PREFIX],
+        bump,
+        space = 8 + CodeList::INIT_SPACE
+    )]
+    codes2: Account<'info, CodeList>,
+
+    #[account(
+        init,
+        payer = owner,
+        seeds = [Project::CODES3_SEED_PREFIX],
+        bump,
+        space = 8 + CodeList::INIT_SPACE
+    )]
+    codes3: Account<'info, CodeList>,
 
     /// CHECK: PDA account
     #[account(

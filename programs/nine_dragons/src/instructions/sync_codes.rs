@@ -2,11 +2,19 @@ use anchor_lang::prelude::*;
 use crate::states::{CodeList, Project};
 use crate::error::*;
 
+const CODES_MAX_LEN: usize = 1500;
+
 pub fn sync_codes(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> {
 
     param.require_len()?;
 
     let code_account = &mut ctx.accounts.codes;
+
+    require_gte!(CODES_MAX_LEN, code_account.codes.len());
+
+    let project = &ctx.accounts.project;
+
+    assert!(code_account.key() == project.codes1 || code_account.key() == project.codes2 || code_account.key() == project.codes3);
 
     code_account.codes.extend(&param.input_codes);
 
@@ -26,7 +34,6 @@ pub struct SyncCodes<'info> {
     #[account(
         seeds = [Project::PROJECT_SEED_PREFIX],
         bump,
-        has_one = codes @ NineDragonsError::InvalidCodesAccount,
         has_one = operator @ NineDragonsError::NotAllowedOperator
     )]
     pub project: Account<'info, Project>,
