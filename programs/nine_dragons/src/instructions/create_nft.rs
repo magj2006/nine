@@ -241,17 +241,17 @@ pub struct CreateNFT<'info> {
     #[account(
         mut
     )]
-    codes1: Account<'info, CodeList>,
+    codes1: Box<Account<'info, CodeList>>,
 
     #[account(
         mut
     )]
-    codes2: Account<'info, CodeList>,
+    codes2: Box<Account<'info, CodeList>>,
 
     #[account(
         mut
     )]
-    codes3: Account<'info, CodeList>,
+    codes3: Box<Account<'info, CodeList>>,
 
     /// CHECK: Validate address by deriving pda
     #[account(
