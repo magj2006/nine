@@ -29,22 +29,24 @@ pub fn create_nft(
 
     require_gt!(project.nonce, 0, NineDragonsError::CreateCollectionFirst);
 
-    let code_list = &mut ctx.accounts.code_list;
+    let code_list = &mut ctx.accounts.codes;
     require!(code_list.codes.iter().any(|code| code.eq(&param.code)), NineDragonsError::InvalidCode);
 
     require!(project.collection_nft.is_some(), NineDragonsError::EmptyCollection);
     require_keys_eq!(project.collection_nft.unwrap().key(), ctx.accounts.collection.key(), NineDragonsError::InvalidCollection);
 
-    transfer(
-        CpiContext::new(
-            ctx.accounts.system_program.to_account_info(),
-            Transfer {
-                from: ctx.accounts.payer.to_account_info(),
-                to: ctx.accounts.recipient.to_account_info(),
-            },
-        ),
-        project.price,
-    )?;
+    if project.price > 0 {
+        transfer(
+            CpiContext::new(
+                ctx.accounts.system_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.payer.to_account_info(),
+                    to: ctx.accounts.recipient.to_account_info(),
+                },
+            ),
+            project.price,
+        )?;
+    }
 
     let signer = &[
         Project::AUTHORITY_SEED_PREFIX,
@@ -202,7 +204,7 @@ pub struct CreateNFT<'info> {
         mut,
         seeds = [Project::PROJECT_SEED_PREFIX],
         bump,
-        has_one = code_list @ NineDragonsError::InvalidCodesAccount
+        has_one = codes @ NineDragonsError::InvalidCodesAccount
     )]
     pub project: Box<Account<'info, Project>>,
 
@@ -220,7 +222,7 @@ pub struct CreateNFT<'info> {
     #[account(
         mut
     )]
-    code_list: Account<'info, CodeList>,
+    codes: Account<'info, CodeList>,
 
     /// CHECK: Validate address by deriving pda
     #[account(

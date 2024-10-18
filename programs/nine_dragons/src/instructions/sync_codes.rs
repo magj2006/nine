@@ -21,7 +21,7 @@ pub fn sync_codes(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> 
 pub struct SyncCodes<'info> {
     #[account(mut,
     )]
-    operator: Signer<'info>,
+    pub operator: Signer<'info>,
 
     #[account(
         seeds = [Project::PROJECT_SEED_PREFIX],
@@ -29,7 +29,7 @@ pub struct SyncCodes<'info> {
         has_one = codes @ NineDragonsError::InvalidCodesAccount,
         has_one = operator @ NineDragonsError::NotAllowedOperator
     )]
-    project: Account<'info, Project>,
+    pub project: Account<'info, Project>,
 
     #[account(
         mut,
@@ -37,11 +37,11 @@ pub struct SyncCodes<'info> {
         realloc::payer = operator,
         realloc::zero = false
     )]
-    codes: Account<'info, CodeList>,
+    pub codes: Account<'info, CodeList>,
 
     /// CHECK: only read, the account which is used to create config account
     pub original_owner: UncheckedAccount<'info>,
-    system_program: Program<'info, System>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Clone, AnchorSerialize, AnchorDeserialize)]
