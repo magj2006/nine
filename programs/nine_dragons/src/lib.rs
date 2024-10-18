@@ -65,5 +65,17 @@ pub mod nine_dragons {
         instructions::sync_codes3(ctx, param)
     }
 
+    pub fn init_codes1(ctx: Context<InitCodes1>) -> Result<()> {
+        instructions::init_codes1(ctx)
+    }
+
+    pub fn init_codes2(ctx: Context<InitCodes2>) -> Result<()> {
+        instructions::init_codes2(ctx)
+    }
+
+    pub fn init_codes3(ctx: Context<InitCodes3>) -> Result<()> {
+        instructions::init_codes3(ctx)
+    }
+
 }
 

@@ -37,7 +37,7 @@ pub struct SyncCodes1<'info> {
         bump,
         has_one = operator @ NineDragonsError::NotAllowedOperator,
     )]
-    pub project: Account<'info, Project>,
+    pub project: Box<Account<'info, Project>>,
 
     #[account(
         mut,
@@ -45,7 +45,7 @@ pub struct SyncCodes1<'info> {
         realloc::payer = operator,
         realloc::zero = false
     )]
-    pub codes: Account<'info, CodeList>,
+    pub codes: Box<Account<'info, CodeList>>,
 
     /// CHECK: only read, the account which is used to create config account
     pub original_owner: UncheckedAccount<'info>,
