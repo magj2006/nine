@@ -53,7 +53,7 @@ pub mod nine_dragons {
         instructions::create_nft(ctx, param)
     }
 
-    pub fn sync_codes1(ctx: Context<SyncCodes1>, param: SyncCodesParam1) -> Result<()> {
+    pub fn sync_codes1(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> {
         instructions::sync_codes(ctx, param)
     }
 
@@ -61,13 +61,13 @@ pub mod nine_dragons {
         instructions::init_codes1(ctx)
     }
 
-    pub fn init_codes2(ctx: Context<InitCodes2>) -> Result<()> {
-        instructions::init_codes2(ctx)
-    }
-
-    pub fn init_codes3(ctx: Context<InitCodes3>) -> Result<()> {
-        instructions::init_codes3(ctx)
-    }
+    // pub fn init_codes2(ctx: Context<InitCodes2>) -> Result<()> {
+    //     instructions::init_codes2(ctx)
+    // }
+    //
+    // pub fn init_codes3(ctx: Context<InitCodes3>) -> Result<()> {
+    //     instructions::init_codes3(ctx)
+    // }
 
 }
 

@@ -30,8 +30,8 @@ pub struct InitCodes1<'info> {
         payer = owner,
         seeds = [Project::CODES1_SEED_PREFIX],
         bump,
-        space = 8 + CodeList::INIT_SPACE
+        space= 10 * 1024 as usize
     )]
-    codes: Box<Account<'info, CodeList>>,
+    codes: AccountLoader<'info, CodeList>,
     system_program: Program<'info, System>
 }

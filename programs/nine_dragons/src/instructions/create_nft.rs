@@ -15,7 +15,7 @@ use anchor_spl::{
 use anchor_spl::metadata::{verify_collection, verify_sized_collection_item, VerifySizedCollectionItem, VerifyCollection};
 
 use crate::error::NineDragonsError;
-use crate::states::{CodeList, CodeList2, CodeList3, CreateNFTParam, Project};
+use crate::states::{CodeList, CreateNFTParam, Project};
 
 pub fn create_nft(
     ctx: Context<CreateNFT>,
@@ -35,11 +35,15 @@ pub fn create_nft(
         project.codes2 == codes.key() ||
         project.codes3 == codes.key());
 
-    if codes.codes.iter().any(|code| code.eq(&param.code)) {
-        codes.codes.retain(|x| x.ne(&param.code))
-    } else {
-        return Err(NineDragonsError::InvalidCode.into())
-    }
+    // if codes.codes.iter().any(|code| code.eq(&param.code)) {
+    //     codes.codes.retain(|x| x.ne(&param.code))
+    // } else {
+    //     return Err(NineDragonsError::InvalidCode.into())
+    // }
+    let codes = ctx.accounts
+        .codes.load()?.codes;
+
+    assert_eq!(codes[param.index as usize..(param.index+8) as usize], param.code);
 
     require!(project.collection_nft.is_some(), NineDragonsError::EmptyCollection);
     require_keys_eq!(project.collection_nft.unwrap().key(), ctx.accounts.collection.key(), NineDragonsError::InvalidCollection);
@@ -230,7 +234,7 @@ pub struct CreateNFT<'info> {
     #[account(
         mut
     )]
-    codes: Box<Account<'info, CodeList>>,
+    codes: AccountLoader<'info, CodeList>,
 
     // #[account(
     //     mut

@@ -71,7 +71,8 @@ pub struct CreateNFTParam {
     pub name: String,  // 20
     pub symbol: String, // 10
     pub uri: String, // 80
-    pub code: [u8; 8]
+    pub code: [u8; 8],
+    pub index: u32
 }
 
 impl CreateCollectionParam {
