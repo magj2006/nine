@@ -31,9 +31,7 @@ pub fn create_nft(
 
     let codes= &mut ctx.accounts.codes;
 
-    assert!(project.codes1 == codes.key() ||
-        project.codes2 == codes.key() ||
-        project.codes3 == codes.key());
+    require_keys_eq!(codes.key(), project.codes);
 
     // if codes.codes.iter().any(|code| code.eq(&param.code)) {
     //     codes.codes.retain(|x| x.ne(&param.code))
