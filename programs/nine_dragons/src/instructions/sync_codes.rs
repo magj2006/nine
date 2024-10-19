@@ -48,7 +48,7 @@ pub struct SyncCodes<'info> {
 
     #[account(
         mut,
-        realloc = 8 + param.new_size as usize * 8,
+        realloc = 8 + 4 + param.new_size as usize * 8,
         seeds = [Project::CODES1_SEED_PREFIX],
         bump,
         realloc::payer = operator,

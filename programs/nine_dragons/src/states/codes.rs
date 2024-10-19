@@ -7,7 +7,7 @@ use bytemuck::{ Pod, Zeroable };
 #[repr(packed)]
 pub struct CodeList {
     pub codes: [u8; 8 * 100],
-    pub current_size: u32
+    pub current_size: u32,
 }
 
 impl CodeList {

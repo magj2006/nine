@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use crate::states::{CodeList, Project};
 
-pub fn init_codes(ctx: Context<InitCodes1>) -> Result<()> {
+pub fn init_codes(ctx: Context<InitCodes>) -> Result<()> {
 
     let project = &mut ctx.accounts.project;
 
@@ -19,7 +19,7 @@ pub fn init_codes(ctx: Context<InitCodes1>) -> Result<()> {
 
 
 #[derive(Accounts)]
-pub struct InitCodes1<'info> {
+pub struct InitCodes<'info> {
     #[account(mut)]
     owner: Signer<'info>,
 
@@ -35,7 +35,7 @@ pub struct InitCodes1<'info> {
         payer = owner,
         seeds = [Project::CODES1_SEED_PREFIX],
         bump,
-        space= 8 + 8 * 100 as usize
+        space= 8 + 4 + 8 * 100 as usize
     )]
     codes: AccountLoader<'info, CodeList>,
     system_program: Program<'info, System>
