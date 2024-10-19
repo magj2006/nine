@@ -4,7 +4,6 @@ use crate::error::*;
 
 
 pub fn sync_codes(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> {
-
     let code_account = &mut ctx.accounts.codes;
 
     let project = &ctx.accounts.project;
@@ -16,15 +15,20 @@ pub fn sync_codes(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> 
 
     let code_list = &mut ctx.accounts.codes.load_mut()?;
 
-    let current_size = code_list.current_size as usize;
-    let end_size = current_size + 100 * 8;
+    // require_gte!(param.len, code_list.len, );
 
-    if end_size > param.new_size as usize {
-        return Err(NineDragonsError::AccountDataTooSmall.into());
+    let current_index = code_list.current_index as usize;
+    let end_index = current_index + param.len as usize * 8;
+
+    if end_index > param.len as usize * 8 + 8 + 4 {
+        return Err(NineDragonsError::AccountDataTooSmall.into())
     }
 
-    code_list.codes[current_size..end_size].copy_from_slice(&param.input_codes);
-    code_list.current_size = end_size as u32;
+    msg!("current index: {current_index}, end index: {end_index}");
+
+    code_list.codes[current_index ..end_index].copy_from_slice(&param.input_codes);
+    code_list.current_index = end_index as u32;
+    // code_list.len = param.len;
 
     msg!("Successful to sync code");
 
@@ -48,7 +52,7 @@ pub struct SyncCodes<'info> {
 
     #[account(
         mut,
-        realloc = 8 + 4 + param.new_size as usize * 8,
+        realloc = 8 + 4 + param.len as usize * 8,
         seeds = [Project::CODES1_SEED_PREFIX],
         bump,
         realloc::payer = operator,
@@ -63,6 +67,7 @@ pub struct SyncCodes<'info> {
 
 #[derive(Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct SyncCodesParam {
-    input_codes: [u8; 8 * 100],
-    new_size: u32,
+    // input_codes: [u8; 8 * 100],
+    input_codes: Vec<u8>,
+    len: u32,
 }
