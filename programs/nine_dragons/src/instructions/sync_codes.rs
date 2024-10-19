@@ -14,10 +14,17 @@ pub fn sync_codes(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> 
     // project.codes3 == code_account.key());
     require_keys_eq!(project.codes, code_account.key());
 
-    ctx.accounts
-        .codes.load_mut()?.codes[param.start as usize..(param.start + 100 * 8) as usize].copy_from_slice(&param.input_codes);
+    let code_list = &mut ctx.accounts.codes.load_mut()?;
 
-    // code_account.codes.extend(&param.input_codes);
+    let current_size = code_list.current_size as usize;
+    let end_size = current_size + 100 * 8;
+
+    if end_size > param.new_size as usize {
+        return Err(NineDragonsError::AccountDataTooSmall.into());
+    }
+
+    code_list.codes[current_size..end_size].copy_from_slice(&param.input_codes);
+    code_list.current_size = end_size as u32;
 
     msg!("Successful to sync code");
 
@@ -41,9 +48,11 @@ pub struct SyncCodes<'info> {
 
     #[account(
         mut,
-        realloc = 8 * 100,
+        realloc = 8 + param.new_size as usize * 8,
+        seeds = [Project::CODES1_SEED_PREFIX],
+        bump,
         realloc::payer = operator,
-        realloc::zero = false
+        realloc::zero = false,
     )]
     pub codes: AccountLoader<'info, CodeList>,
 
@@ -55,5 +64,5 @@ pub struct SyncCodes<'info> {
 #[derive(Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct SyncCodesParam {
     input_codes: [u8; 8 * 100],
-    start: u32,
+    new_size: u32,
 }

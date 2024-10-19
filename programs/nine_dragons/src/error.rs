@@ -29,5 +29,7 @@ pub enum NineDragonsError {
     #[msg("Invalid code")]
     InvalidCode,
     #[msg("Invalid codes account")]
-    InvalidCodesAccount
+    InvalidCodesAccount,
+    #[msg("account data too small")]
+    AccountDataTooSmall
 }

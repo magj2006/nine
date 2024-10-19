@@ -7,6 +7,11 @@ pub fn init_codes(ctx: Context<InitCodes1>) -> Result<()> {
 
     project.codes = ctx.accounts.codes.key();
 
+    let code_list = &mut ctx.accounts.codes.load_init()?;
+
+    code_list.codes = [0u8; 8 * 100];
+    code_list.current_size = 0;
+
     msg!("Init codes");
 
     Ok(())
