@@ -17,7 +17,7 @@ pub struct Project {
     pub project_name: String,
     pub is_mutable: bool,
     pub operator: Pubkey,
-    pub codes1: Pubkey,
+    pub codes: Pubkey,
     pub codes2: Pubkey,
     pub codes3: Pubkey,
     #[max_len(500)]

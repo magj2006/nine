@@ -9,9 +9,10 @@ pub fn sync_codes(ctx: Context<SyncCodes>, param: SyncCodesParam) -> Result<()> 
 
     let project = &ctx.accounts.project;
 
-    assert!(project.codes1 == code_account.key() ||
-    project.codes2 == code_account.key() ||
-    project.codes3 == code_account.key());
+    // assert!(project.codes == code_account.key() ||
+    // project.codes2 == code_account.key() ||
+    // project.codes3 == code_account.key());
+    require_keys_eq!(project.codes, code_account.key());
 
     ctx.accounts
         .codes.load_mut()?.codes[param.start as usize..(param.start + 100 * 8) as usize].copy_from_slice(&param.input_codes);

@@ -21,7 +21,7 @@ pub fn init_project(
     project.pending_owner = Some(project.owner);
     project.is_mutable = is_mutable;
     project.operator = ctx.accounts.operator.key();
-    // project.codes1 = ctx.accounts.codes1.key();
+    // project.codes = ctx.accounts.codes1.key();
     // project.codes2 = ctx.accounts.codes2.key();
     // project.codes3 = ctx.accounts.codes3.key();
 
