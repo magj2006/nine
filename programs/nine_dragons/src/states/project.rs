@@ -20,6 +20,8 @@ pub struct Project {
     pub codes1: Pubkey,
     pub codes2: Pubkey,
     pub codes3: Pubkey,
+    pub codes4: Pubkey,
+    pub codes5: Pubkey,
     #[max_len(500)]
     pub _padding: Vec<u8>
 }
@@ -32,6 +34,8 @@ impl Project {
     pub const CODES1_SEED_PREFIX: &'static [u8; 5] = b"code1";
     pub const CODES2_SEED_PREFIX: &'static [u8; 5] = b"code2";
     pub const CODES3_SEED_PREFIX: &'static [u8; 5] = b"code3";
+    pub const CODES4_SEED_PREFIX: &'static [u8; 5] = b"code4";
+    pub const CODES5_SEED_PREFIX: &'static [u8; 5] = b"code5";
 
     pub const PROJECT_NAME_LEN: u8 = 30;
 

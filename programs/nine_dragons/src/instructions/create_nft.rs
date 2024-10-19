@@ -29,24 +29,17 @@ pub fn create_nft(
 
     require_gt!(project.nonce, 0, NineDragonsError::CreateCollectionFirst);
 
-    let codes1= &mut ctx.accounts.codes1;
-    let codes2 = &mut ctx.accounts.codes2;
-    let codes3= &mut ctx.accounts.codes3;
+    let codes= &mut ctx.accounts.codes;
 
-    // assert!(codes1.codes.iter().any(|code| code.eq(&param.code)) ||
-    //     codes2.codes.iter().any(|code| code.eq(&param.code)) ||
-        // codes3.codes.iter().any(|code| code.eq(&param.code)));
+    //if codes1.codes.iter().any(|code| code.eq(&param.code)) {
+    //    codes1.codes.retain(|x| x.ne(&param.code))
+    //}
 
-    if codes1.codes.iter().any(|code| code.eq(&param.code)) {
-        codes1.codes.retain(|x| x.ne(&param.code))
-    } else if codes2.codes.iter().any(|code| code.eq(&param.code)) {
-        codes2.codes.retain(|x| x.ne(&param.code))
-    } else if codes3.codes.iter().any(|code| code.eq(&param.code))
-    {
-        codes3.codes.retain(|x| x.ne(&param.code))
-    } else {
-        return Err(NineDragonsError::InvalidCode.into())
-    }
+    assert!(project.codes1 == codes.key() ||
+        project.codes2 == codes.key() ||
+        project.codes3 == codes.key() ||
+        project.codes4 == codes.key() ||
+        project.codes5 == codes.key());
 
 
     require!(project.collection_nft.is_some(), NineDragonsError::EmptyCollection);
@@ -221,9 +214,6 @@ pub struct CreateNFT<'info> {
         mut,
         seeds = [Project::PROJECT_SEED_PREFIX],
         bump,
-        has_one = codes1 @ NineDragonsError::InvalidCodesAccount,
-        has_one = codes2 @ NineDragonsError::InvalidCodesAccount,
-        has_one = codes3 @ NineDragonsError::InvalidCodesAccount,
     )]
     pub project: Box<Account<'info, Project>>,
 
@@ -241,17 +231,7 @@ pub struct CreateNFT<'info> {
     #[account(
         mut
     )]
-    codes1: Box<Account<'info, CodeList>>,
-
-    #[account(
-        mut
-    )]
-    codes2: Box<Account<'info, CodeList>>,
-
-    #[account(
-        mut
-    )]
-    codes3: Box<Account<'info, CodeList>>,
+    codes: Box<Account<'info, CodeList>>,
 
     /// CHECK: Validate address by deriving pda
     #[account(

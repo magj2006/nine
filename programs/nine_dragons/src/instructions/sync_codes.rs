@@ -1,11 +1,11 @@
 use anchor_lang::prelude::*;
-use crate::states::{CodeList, Project};
+
 use crate::error::*;
+use crate::states::{CodeList, Project};
 
 const CODES_MAX_LEN: usize = 1500;
 
 pub fn sync_codes(ctx: Context<SyncCodes1>, param: SyncCodesParam1) -> Result<()> {
-
     param.require_len()?;
 
     let code_account = &mut ctx.accounts.codes;
@@ -14,8 +14,10 @@ pub fn sync_codes(ctx: Context<SyncCodes1>, param: SyncCodesParam1) -> Result<()
 
     let project = &ctx.accounts.project;
     assert!(project.codes1 == code_account.key() ||
-    project.codes2 == code_account.key() ||
-    project.codes3 == code_account.key());
+        project.codes2 == code_account.key() ||
+        project.codes3 == code_account.key() ||
+        project.codes4 == code_account.key() ||
+        project.codes5 == code_account.key());
 
     code_account.codes.extend(&param.input_codes);
 
@@ -54,7 +56,7 @@ pub struct SyncCodes1<'info> {
 
 #[derive(Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct SyncCodesParam1 {
-    input_codes: Vec<[u8; 8]>
+    input_codes: Vec<[u8; 8]>,
 }
 
 impl SyncCodesParam1 {
@@ -64,7 +66,7 @@ impl SyncCodesParam1 {
 }
 
 impl SyncCodesParam1 {
-    pub fn require_len(&self) -> Result<()>  {
+    pub fn require_len(&self) -> Result<()> {
         require_gte!(300, self.input_codes.len(), NineDragonsError::MoreThanLimit);
 
         Ok(())
