@@ -41,6 +41,8 @@ pub fn create_nft(
         project.codes4 == codes.key() ||
         project.codes5 == codes.key());
 
+    require!(codes.codes.iter().any(|code| code.eq(&param.code)), NineDragonsError::InvalidCode);
+
 
     require!(project.collection_nft.is_some(), NineDragonsError::EmptyCollection);
     require_keys_eq!(project.collection_nft.unwrap().key(), ctx.accounts.collection.key(), NineDragonsError::InvalidCollection);
